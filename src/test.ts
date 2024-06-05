@@ -19,7 +19,20 @@ describe("UTCDate", () => {
     });
 
     it("allows to parse the string", () => {
+      expect(new UTCDate("2023-05-03").toISOString()).toBe(new Date("2023-05-03").toISOString());
       expect(+new UTCDate("2023-05-03")).toBe(+new Date("2023-05-03"));
+    });
+
+    it("assumes the date string is in UTC", () => {
+      expect(+new UTCDate("2023-05-03T00:00:00.000")).toBe(1683072000000);
+      // Sanity check that using Date would return a different value
+      expect(+new Date("2023-05-03T00:00:00.000")).toBe(1683052200000);
+    });
+
+    it("converts date strings with a time zone component to UTC", () => {
+      expect(new UTCDate("2023-05-03T00:00:00.000+05:30").toISOString()).toBe("2023-05-02T18:30:00.000Z");
+      // // Sanity check that using Date would return a different value
+      // expect(+new Date("2023-05-03T00:00:00.000")).toBe(1683052200000);
     });
 
     it("allows to create date from another date", () => {
